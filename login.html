@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>F1 Store</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jersey+15&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+  <div class="screen">
+     <header class="topbar">
+    <img src="F1-logo.png" alt="F1 Logo" class="logo">
+    </header>
+
+    <div class="lang" aria-label="Change language" role="button" tabindex="0">
+      <img src="Globe-icon.png" alt="Language" class= "langu">
+    </div>
+
+    <div class="stripe s1"></div><div class="stripe s2"></div><div class="stripe s3"></div>
+    <div class="stripe s4"></div><div class="stripe s5"></div><div class="stripe s6"></div>
+    <div class="stripe s7"></div>
+
+    <main class="main">
+      <section class="card">
+        <div class="padded">
+          <h1>Log in</h1>
+          <p class="sub">Not a member yet? <a href="https://ph.pinterest.com/pin/702983823139237712/">Create account</a> </p>
+
+          <form id="loginForm" novalidate>
+            <p class="error" id="formError">Please fill in all required fields</p>
+
+            <div class="field">
+              <input type="email" id="email" placeholder="Email*" autocomplete="email">
+              <p class="error" id="emailError">Please provide a valid email address</p>
+            </div>
+
+            <div class="field">
+              <input type="password" id="password" placeholder="Password*" autocomplete="current-password">
+              <p class="error" id="passwordError">Please enter a valid password</p>
+            </div>
+
+            <div class="actions">
+              <button type="submit" class="btn">Log In</button><br>
+              <a href="https://ph.pinterest.com/pin/1126392556797400767/" class="forgot">Forgot password</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script src="./script.js"> </script>
+
+</body>
+</html>

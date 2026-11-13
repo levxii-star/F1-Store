@@ -1,69 +1,178 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, FormEvent } from "react";
+import { Jersey_15 } from "next/font/google";
+import { supabase } from "@/lib/supabase";
+import "./login.css";
+
+const jersey = Jersey_15({ subsets: ["latin"], weight: "400" });
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const specialPattern = /[!?@#$%&_]/;
+
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [formError, setFormError] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  function checkEmail(value: string) {
+    const ok = emailPattern.test(value.trim());
+    setEmailError(!ok);
+    return ok;
+  }
+
+  function checkPassword(value: string) {
+    const ok = specialPattern.test(value);
+    setPasswordError(!ok);
+    return ok;
+  }
+
+  function clearMessages() {
+    setFormError(false);
+    setLoginError("");
+    setSuccess(false);
+  }
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    clearMessages();
+
+    // Both fields empty
+    if (email.trim() === "" && password === "") {
+      setFormError(true);
+      setEmailError(false);
+      setPasswordError(false);
+      return;
+    }
+
+    // Check each field
+    const emailOk = checkEmail(email);
+    const passwordOk = checkPassword(password);
+    if (!emailOk || !passwordOk) return;
+
+    // Ask Supabase if this is a registered user
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    setLoading(false);
+
+    if (error) {
+      setLoginError("Incorrect email or password");
+    } else {
+      setSuccess(true);
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className={`page ${jersey.className}`}>
+      <div className="screen">
+        <header className="topbar">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/F1-logo.png" alt="F1 Logo" className="logo" />
+        </header>
+
+        <div className="lang" aria-label="Change language" role="button" tabIndex={0}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/Globe-icon.png" alt="Language" className="langu" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        <div className="stripe s1" />
+        <div className="stripe s2" />
+        <div className="stripe s3" />
+        <div className="stripe s4" />
+        <div className="stripe s5" />
+        <div className="stripe s6" />
+        <div className="stripe s7" />
+
+        <main className="main">
+          <section className="card">
+            <div className="padded">
+              <h1>Log in</h1>
+              <p className="sub">
+                Not a member yet?{" "}
+                <a href="https://ph.pinterest.com/pin/702983823139237712/">
+                  Create account
+                </a>
+              </p>
+
+              <form onSubmit={handleSubmit} noValidate>
+                {formError && (
+                  <p className="error show" id="formError">
+                    Please fill in all required fields
+                  </p>
+                )}
+
+                <div className="field">
+                  <input
+                    type="email"
+                    placeholder="Email*"
+                    autoComplete="email"
+                    value={email}
+                    className={emailError ? "invalid" : ""}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      clearMessages();
+                      if (emailError) checkEmail(e.target.value);
+                    }}
+                    onBlur={() => {
+                      if (email !== "") checkEmail(email);
+                    }}
+                  />
+                  {emailError && (
+                    <p className="error show">
+                      Please provide a valid email address
+                    </p>
+                  )}
+                </div>
+
+                <div className="field">
+                  <input
+                    type="password"
+                    placeholder="Password*"
+                    autoComplete="current-password"
+                    value={password}
+                    className={passwordError ? "invalid" : ""}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      clearMessages();
+                      if (passwordError) checkPassword(e.target.value);
+                    }}
+                    onBlur={() => {
+                      if (password !== "") checkPassword(password);
+                    }}
+                  />
+                  {passwordError && (
+                    <p className="error show">Please enter a valid password</p>
+                  )}
+                </div>
+
+                {loginError && <p className="error show">{loginError}</p>}
+                {success && <p className="success">Logged in successfully</p>}
+
+                <div className="actions">
+                  <button type="submit" className="btn" disabled={loading}>
+                    {loading ? "Logging in..." : "Log In"}
+                  </button>
+                  <br />
+                  <a
+                    href="https://ph.pinterest.com/pin/1126392556797400767/"
+                    className="forgot"
+                  >
+                    Forgot password
+                  </a>
+                </div>
+              </form>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import { Jersey_15 } from "next/font/google";
 import { supabase } from "@/lib/supabase";
 import "./login.css";
+import Link from "next/link";
 
 const jersey = Jersey_15({ subsets: ["latin"], weight: "400" });
 
@@ -42,7 +43,6 @@ export default function LoginPage() {
     e.preventDefault();
     clearMessages();
 
-    // Both fields empty
     if (email.trim() === "" && password === "") {
       setFormError(true);
       setEmailError(false);
@@ -50,12 +50,10 @@ export default function LoginPage() {
       return;
     }
 
-    // Check each field
     const emailOk = checkEmail(email);
     const passwordOk = checkPassword(password);
     if (!emailOk || !passwordOk) return;
 
-    // Ask Supabase if this is a registered user
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email: email.trim(),
@@ -74,12 +72,12 @@ export default function LoginPage() {
     <div className={`page ${jersey.className}`}>
       <div className="screen">
         <header className="topbar">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img src="/F1-logo.png" alt="F1 Logo" className="logo" />
         </header>
 
         <div className="lang" aria-label="Change language" role="button" tabIndex={0}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img src="/Globe-icon.png" alt="Language" className="langu" />
         </div>
 
@@ -97,9 +95,7 @@ export default function LoginPage() {
               <h1>Log in</h1>
               <p className="sub">
                 Not a member yet?{" "}
-                <a href="https://ph.pinterest.com/pin/702983823139237712/">
-                  Create account
-                </a>
+                <Link href="/signup">Create account</Link>
               </p>
 
               <form onSubmit={handleSubmit} noValidate>
@@ -162,7 +158,7 @@ export default function LoginPage() {
                   </button>
                   <br />
                   <a
-                    href="https://ph.pinterest.com/pin/1126392556797400767/"
+                    href="#"
                     className="forgot"
                   >
                     Forgot password
